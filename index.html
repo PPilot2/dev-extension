@@ -9,30 +9,71 @@
     <header>
         <h2 id="time"></h2>
         <h1>Dev Extension</h1>
-        <button>Settings</button>
+        <div id="settings" class="dropdown">
+          <details>
+            <summary>Settings</summary>
+            <div class="dropdown-options">
+              <div id="changeNameContainer">
+                <label for="changeName">Change your name</label>
+                <br>
+                <input type="text" name="changeName" id="nameInputChange" placeholder="Change your name" />
+                <button id="nameInputChangeButton">Change</button>
+              </div>
+              <h3>Customize</h3>
+              <div id="colorChanger">
+                <input type="color" id="color-input" placeholder="Change the background" />
+                <button id="color-button">Change</button>
+              </div>
+              <div id="backgroundImage">
+                Set background image
+                <br>
+                <input type="button" id="background-image-gallery" value="Choose from gallery">
+                <input type="file" id="background-image-input" accept="image/*">
+              </div>
+              <br>
+              <div id="backgroundImageSetter">
+                <button id="set-background-image-button">Set Background Image</button>
+                <button id="reset-background-button">Reset Background</button>
+              </div>
+            </div>
+          </details>
+        </div>      
     </header>
     <main id="main">
+      <div id="main-container">
         <h1 id="greeting">Hi, how's it going?</h1>
-        <input type="text" id="name-input" placeholder="Enter your name" />
         <h2 id="quote"></h2>
-    </main>
-    <div id="to-dos">
-      <div id="customize">
-        <h2>Customize</h2>
-        <div id="colorChanger">
-          <input type="color" id="color-input" placeholder="Change the background" />
-          <button id="color-button">Change</button>
+        <input type="text" id="name-input" placeholder="Enter your name" />
+        <div id="searchFormContainer">
+          <form action="https://www.google.com/search" class="searchform" method="get" name="searchform" id="searchForm">
+            <input name="sitesearch" type="hidden">
+            <input id="search" autocomplete="on" class="form-control search" name="q" placeholder="Google Search &#x1F50D" required="required"  type="text">
+            <button class="button" type="submit" id="searchSubmit">Search</button>
+          </form>
         </div>
-        <div id="backgroundImage">
-          Set background image
-          <input type="file" id="background-image-input" accept="image/*">
-        </div>
-        <br>
-        <div id="backgroundImageSetter">
-          <button id="set-background-image-button">Set Background Image</button>
-          <button id="reset-background-button">Reset Background</button>
+        <div id="popupGallery">
+          <div id="popupGalleryContent">
+            <div id="popupHeader">
+              <button id="closePopupGallery">&times;</button>
+            </div>
+            <div id="gallery">
+              <h2><center>Choose a background image</center></h2>
+              <img src="images/backgroundimage1.jpg" alt="1" class="gallery-image" id="backgroundimage1" width="200" height="200"/>
+              <img src="images/backgroundimage2.jpg" alt="2" class="gallery-image" id="backgroundimage2" width="200" height="200"/>
+              <img src="images/backgroundimage3.jpg" alt="2" class="gallery-image" id="backgroundimage3" width="200" height="200"/>
+              <img src="images/backgroundimage4.jpg" alt="2" class="gallery-image" id="backgroundimage4" width="200" height="200"/>
+              <img src="images/backgroundimage5.jpg" alt="2" class="gallery-image" id="backgroundimage5" width="200" height="200"/>
+            </div>
+          </div>
         </div>
       </div>
+    </main>
+    <div id="to-dos"> 
+      <div id="postsContainer">
+        <div id="posts">
+          <h2>Top Articles from <a href="dev.to">Dev.to</a> this week</h2>
+        </div>
+      </div>   
       <div id="todo-container">
         <h2>Add PRs</h2>
         <input type="text" id="todo-input" placeholder="Add a task" />

@@ -20,6 +20,9 @@ function setBackgroundImage() {
 document.getElementById('reset-background-button').addEventListener('click', function () {
   chrome.storage.local.remove('backgroundImage', function () {
     document.body.style.backgroundImage = '';
+    document.body.style.backgroundColor = '#fff';
+    chrome.storage.local.set({ backgroundColor: '#fff' });
+    chrome.storage.local.set({ backgroundImage: '' });
   });
 });
 // Load saved background image on window load
@@ -41,8 +44,9 @@ window.onload = function () {
   });
 
   refreshGreeting();
-  getTime();
+  updateTime();
   getRandomQuote('quotes.txt');
+  defaultBackground();
 };
 
 
@@ -149,17 +153,21 @@ function refreshGreeting() {
   chrome.storage.local.get(['userName'], function (result) {
     if (result.userName) {
       document.getElementById('greeting').textContent = `Hi, ${result.userName}, how's it going?`;
+      document.getElementById('nameInputChange').value = result.userName;  
     }
   });
 }
 
-function getTime() {
-  const time = document.getElementById('time');
-  const date = new Date();
-  const hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  time.textContent = `${hours}:${minutes}`;
+function updateTime() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const timeString = `${hours}:${minutes}`;
+  document.getElementById('time').textContent = timeString;
 }
+
+// Update the time every second
+setInterval(updateTime, 1000);
 
 function getRandomQuote(filePath) {
   fetch(filePath)
@@ -176,6 +184,146 @@ document.getElementById('color-button').addEventListener('click', changeBackgrou
 
 function changeBackground() {
   const color = document.getElementById('color-input').value;
-  chrome.storage.local.set({ backgroundColor: color });
-  document.body.style.backgroundColor = color;
+  chrome.storage.local.set({ backgroundColor: color }, () => {
+    console.log('Color saved:', color); // Debugging
+    document.body.style.backgroundColor = color; // Set the background color
+    document.body.style.backgroundImage = ''; // Remove the background image
+    chrome.storage.local.set({ backgroundImage: '' });
+  });
 }
+
+// Restore the background color from storage on page load
+chrome.storage.local.get(['backgroundColor'], (result) => {
+  if (result.backgroundColor) {
+    document.body.style.backgroundColor = result.backgroundColor;
+  }
+});
+
+document.getElementById('nameInputChangeButton').addEventListener('click', updateName);
+
+function updateName() {
+  const name = document.getElementById('nameInputChange').value;
+  chrome.storage.local.set({ userName: name }, function () {
+    refreshGreeting();
+  });
+}
+
+// background-image: url(images/backgroundimage1.jpg);
+// background-repeat: repeat;
+// background-position: center;
+// background-size: cover;
+function defaultBackground() {
+  const randomImage = Math.floor(Math.random() * 5) + 1;
+  const imageUrl = chrome.storage.local.get(['backgroundImage']);
+  document.body.style.backgroundImage = 'url(${imageUrl})';
+  document.body.style.backgroundRepeat = 'repeat';
+  document.body.style.backgroundPosition = 'center';
+  document.body.style.backgroundSize = 'cover';
+  document.getElementById('popupGallery').style.display = 'none';
+}
+
+document.getElementById('background-image-gallery').addEventListener('click', showPopup);
+
+function showPopup() {
+  document.getElementById('popupGallery').style.display = 'flex';
+}
+
+document.getElementById('closePopupGallery').addEventListener('click', closePopup);
+
+function closePopup() {
+  document.getElementById('popupGallery').style.display = 'none';
+}
+
+const galleryImages = document.querySelectorAll('.gallery-image');
+galleryImages.forEach(image => {
+  image.addEventListener('click', function() {
+    // Set the background image of the body
+    document.body.style.backgroundImage = `url(${image.src})`;
+    chrome.storage.local.set({ backgroundImage: image.src });
+    closePopup(); // Close the popup after selecting an image
+  });
+});
+
+//dev.to web scraper
+
+// async function getDevToTopPosts(limit = 5) {
+//   try {
+//     const response = await fetch(`https://dev.to/api/articles?top=${limit}`);
+//     const posts = await response.json();
+    
+//     console.log("Top Dev.to Posts:", posts);
+//     return posts;
+//   } catch (error) {
+//     console.error("Error fetching posts:", error);
+//     return [];
+//   }
+// }
+
+// // Example usage
+// getDevToTopPosts(3).then(posts => {
+//   posts.forEach(post => {
+//     console.log(`
+//       Title: ${post.title}
+//       URL: ${post.url}
+//       👍 Likes: ${post.positive_reactions_count}
+//     `);
+//   });
+// });
+
+// async function loadTopPosts() {
+//   const postsContainer = document.getElementById("posts");
+//   try {
+//     const response = await fetch("https://dev.to/api/articles?top=5");
+//     const posts = await response.json();
+    
+//     posts.forEach(post => {
+//       const postElement = document.createElement("div");
+//       postElement.innerHTML = `
+//         <h3><a href="${post.url}" target="_blank">${post.title}</a></h3>
+//         <p>👍 ${post.positive_reactions_count} | 💬 ${post.author}</p>
+//       `;
+//       postsContainer.appendChild(postElement);
+//     });
+//   } catch (error) {
+//     postsContainer.innerHTML = `<p>Error loading posts: ${error.message}</p>`;
+//   }
+// }
+
+// loadTopPosts();
+async function fetchTopPosts() {
+  try {
+    const response = await fetch('https://dev.to/api/articles?top=5');
+    const posts = await response.json();
+    displayPosts(posts);
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+  }
+}
+
+function displayPosts(posts) {
+  const postsContainer = document.getElementById('posts');
+  postsContainer.innerHTML = '<h2>Top 5 Articles from <a href="https://dev.to">Dev.to</a></h2>';
+
+  posts.forEach(post => {
+    const postElement = document.createElement('div');
+    postElement.className = 'post';
+    
+    // Properly format reactions and comments
+    const reactions = post.positive_reactions_count || 0;
+    const comments = post.comments_count || 0;
+    const author = post.user?.name || 'Unknown author';
+    
+    postElement.innerHTML = `
+      <h3><a href="${post.url}">${post.title}</a></h3>
+      <p class="post-meta">
+        <span>👤 ${author}</span> | 
+        <span>👍 ${reactions}</span> | 
+        <span>💬 ${comments}</span>
+      </p>
+    `;
+    postsContainer.appendChild(postElement);
+  });
+}
+
+// Call this when your page loads
+document.addEventListener('DOMContentLoaded', fetchTopPosts);

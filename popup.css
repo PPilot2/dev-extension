@@ -12,3 +12,10 @@ body, html {
     justify-content: center;
     background-color: #9a9a9a;
 }
+
+#popupGallery {
+    width: 70%;
+    height: 60%;
+    background-color: #9a9a9a;
+    display: flex;
+}
