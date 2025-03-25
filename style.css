@@ -1,9 +1,128 @@
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  max-height: 100vh;
+  overflow-x: hidden;
 }
 
 header {
+  padding: 20px;
+  display: flex;
   flex: row;
+  align-items: center;
   justify-content: space-between;
+}
+
+main {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center;
+  justify-content: center;
+  max-width: 70%;
+  margin-left: 15%;
+  text-align: center;
+}
+
+#customize {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+#to-dos {
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#todo-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#todo-container h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#todo-input {
+  width: 96%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#todo-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#todo-list li {
+  display: flex;
+  justify-content:space-evenly ;
+  align-items: center;
+  background-color: #fff;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+#todo-list li button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#todo-list li button:hover {
+  background-color: #c82333;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #0057b7;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+#add-button {
+  background-color: #007bff;
+  color: #fff;
+  width: 100%;
+}
+
+#set-background-image-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+#reset-background-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
 }
