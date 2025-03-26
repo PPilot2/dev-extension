@@ -163,9 +163,12 @@ function updateTime() {
   const hours = now.getHours().toString().padStart(2, '0');
   const minutes = now.getMinutes().toString().padStart(2, '0');
   const timeString = `${hours}:${minutes}`;
-  document.getElementById('time').textContent = timeString;
+  if (hours <= 12) {
+    document.getElementById('time').innerHTML = `${timeString} <img src="images/day.png" alt="Day" width="25" height="25"/>`;
+  } else {
+    document.getElementById('time').innerHTML = `${timeString} <img src="images/night.png" alt="Night" width="25" height="25"/>`;
+  }
 }
-
 // Update the time every second
 setInterval(updateTime, 1000);
 
@@ -208,10 +211,6 @@ function updateName() {
   });
 }
 
-// background-image: url(images/backgroundimage1.jpg);
-// background-repeat: repeat;
-// background-position: center;
-// background-size: cover;
 function defaultBackground() {
   const randomImage = Math.floor(Math.random() * 5) + 1;
   const imageUrl = chrome.storage.local.get(['backgroundImage']);
@@ -244,52 +243,6 @@ galleryImages.forEach(image => {
   });
 });
 
-//dev.to web scraper
-
-// async function getDevToTopPosts(limit = 5) {
-//   try {
-//     const response = await fetch(`https://dev.to/api/articles?top=${limit}`);
-//     const posts = await response.json();
-    
-//     console.log("Top Dev.to Posts:", posts);
-//     return posts;
-//   } catch (error) {
-//     console.error("Error fetching posts:", error);
-//     return [];
-//   }
-// }
-
-// // Example usage
-// getDevToTopPosts(3).then(posts => {
-//   posts.forEach(post => {
-//     console.log(`
-//       Title: ${post.title}
-//       URL: ${post.url}
-//       👍 Likes: ${post.positive_reactions_count}
-//     `);
-//   });
-// });
-
-// async function loadTopPosts() {
-//   const postsContainer = document.getElementById("posts");
-//   try {
-//     const response = await fetch("https://dev.to/api/articles?top=5");
-//     const posts = await response.json();
-    
-//     posts.forEach(post => {
-//       const postElement = document.createElement("div");
-//       postElement.innerHTML = `
-//         <h3><a href="${post.url}" target="_blank">${post.title}</a></h3>
-//         <p>👍 ${post.positive_reactions_count} | 💬 ${post.author}</p>
-//       `;
-//       postsContainer.appendChild(postElement);
-//     });
-//   } catch (error) {
-//     postsContainer.innerHTML = `<p>Error loading posts: ${error.message}</p>`;
-//   }
-// }
-
-// loadTopPosts();
 async function fetchTopPosts() {
   try {
     const response = await fetch('https://dev.to/api/articles?top=5');

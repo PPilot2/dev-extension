@@ -8,21 +8,20 @@
   <body id="body">
     <header>
         <h2 id="time"></h2>
-        <h1>Dev Extension</h1>
         <div id="settings" class="dropdown">
           <details>
-            <summary>Settings</summary>
+            <summary><img src="images/settings.png" alt="Settings" width="30" height="30"></summary>
             <div class="dropdown-options">
+              <label for="changeName">Change your name</label>
               <div id="changeNameContainer">
-                <label for="changeName">Change your name</label>
-                <br>
                 <input type="text" name="changeName" id="nameInputChange" placeholder="Change your name" />
-                <button id="nameInputChangeButton">Change</button>
+                <button id="nameInputChangeButton">Update</button>
               </div>
-              <h3>Customize</h3>
+              <h3>Customize background</h3>
               <div id="colorChanger">
+                <label for="Background color"></label>
                 <input type="color" id="color-input" placeholder="Change the background" />
-                <button id="color-button">Change</button>
+                <button id="color-button">Set color</button>
               </div>
               <div id="backgroundImage">
                 Set background image
@@ -34,6 +33,14 @@
               <div id="backgroundImageSetter">
                 <button id="set-background-image-button">Set Background Image</button>
                 <button id="reset-background-button">Reset Background</button>
+              </div>
+            </div>
+            <h3>GitHub Integration</h3>
+            <div id="github-login-section">
+              <button id="githubLoginButton">Sign in with GitHub</button>
+              <div id="githubReposSection" style="display: none; margin-top: 10px;">
+                <select id="repoSelect"></select>
+                <button id="loadPrsButton">Load PRs</button>
               </div>
             </div>
           </details>
@@ -81,6 +88,7 @@
         <ul id="todo-list"></ul>
       </div>
     </div>
+    <script src="github.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
