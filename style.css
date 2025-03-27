@@ -188,7 +188,7 @@ details > summary::-webkit-details-marker {
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end; /* Align items to the bottom */
-  height: 40vh; /* Use viewport height units for consistent spacing */
+  max-height: 40vh; /* Use viewport height units for consistent spacing */
   box-sizing: border-box;
   margin-bottom: 20px; /* Add margin at the bottom */
   gap: 20px; /* Space between posts and todos */
@@ -210,7 +210,7 @@ details > summary::-webkit-details-marker {
   padding: 15px;
   border-radius: 8px;
   background-color: #e9e9e9;
-  align-self: flex-end; /* Push to the bottom */
+  overflow-y: auto;
 }
 
 #todo-container h2 {
@@ -382,32 +382,4 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 3px;
-}
-
-#github-login-section {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-}
-
-#repoSelect {
-  width: 100%;
-  margin: 5px 0;
-}
-
-#loadPrsButton {
-  width: 100%;
-  margin: 5px 0;
-}
-
-#todo-list li {
-  margin: 5px 0;
-  padding: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#todo-list li button {
-  margin-left: 5px;
 }

@@ -35,14 +35,6 @@
                 <button id="reset-background-button">Reset Background</button>
               </div>
             </div>
-            <h3>GitHub Integration</h3>
-            <div id="github-login-section">
-              <button id="githubLoginButton">Sign in with GitHub</button>
-              <div id="githubReposSection" style="display: none; margin-top: 10px;">
-                <select id="repoSelect"></select>
-                <button id="loadPrsButton">Load PRs</button>
-              </div>
-            </div>
           </details>
         </div>      
     </header>
@@ -77,18 +69,19 @@
     </main>
     <div id="to-dos"> 
       <div id="postsContainer">
-        <div id="posts">
+        <!-- <div id="posts">
           <h2>Top Articles from <a href="dev.to">Dev.to</a> this week</h2>
-        </div>
+        </div> -->
+        <h1>Latest News</h1>
+        <div id="news-container"></div>
       </div>   
       <div id="todo-container">
-        <h2>Add PRs</h2>
+        <h2>Add To dos</h2>
         <input type="text" id="todo-input" placeholder="Add a task" />
         <button id="add-button">Add</button>
         <ul id="todo-list"></ul>
       </div>
     </div>
-    <script src="github.js"></script>
-    <script src="script.js"></script>
   </body>
+  <script src="script.js"></script>
 </html>

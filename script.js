@@ -243,40 +243,101 @@ galleryImages.forEach(image => {
   });
 });
 
-async function fetchTopPosts() {
-  try {
-    const response = await fetch('https://dev.to/api/articles?top=5');
-    const posts = await response.json();
-    displayPosts(posts);
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-  }
-}
+// async function fetchTopPosts() {
+//   try {
+//     const response = await fetch('https://dev.to/api/articles?top=5');
+//     const posts = await response.json();
+//     displayPosts(posts);
+//   } catch (error) {
+//     console.error('Error fetching posts:', error);
+//   }
+// }
 
-function displayPosts(posts) {
-  const postsContainer = document.getElementById('posts');
-  postsContainer.innerHTML = '<h2>Top 5 Articles from <a href="https://dev.to">Dev.to</a></h2>';
+// function displayPosts(posts) {
+//   const postsContainer = document.getElementById('posts');
+//   postsContainer.innerHTML = '<h2>Top 5 Articles from <a href="https://dev.to">Dev.to</a></h2>';
 
-  posts.forEach(post => {
-    const postElement = document.createElement('div');
-    postElement.className = 'post';
+//   posts.forEach(post => {
+//     const postElement = document.createElement('div');
+//     postElement.className = 'post';
     
-    // Properly format reactions and comments
-    const reactions = post.positive_reactions_count || 0;
-    const comments = post.comments_count || 0;
-    const author = post.user?.name || 'Unknown author';
+//     // Properly format reactions and comments
+//     const reactions = post.positive_reactions_count || 0;
+//     const comments = post.comments_count || 0;
+//     const author = post.user?.name || 'Unknown author';
     
-    postElement.innerHTML = `
-      <h3><a href="${post.url}">${post.title}</a></h3>
-      <p class="post-meta">
-        <span>👤 ${author}</span> | 
-        <span>👍 ${reactions}</span> | 
-        <span>💬 ${comments}</span>
-      </p>
-    `;
-    postsContainer.appendChild(postElement);
-  });
-}
+//     postElement.innerHTML = `
+//       <h3><a href="${post.url}">${post.title}</a></h3>
+//       <p class="post-meta">
+//         <span>👤 ${author}</span> | 
+//         <span>👍 ${reactions}</span> | 
+//         <span>💬 ${comments}</span>
+//       </p>
+//     `;
+//     postsContainer.appendChild(postElement);
+//   });
+// }
 
 // Call this when your page loads
-document.addEventListener('DOMContentLoaded', fetchTopPosts);
+// document.addEventListener('DOMContentLoaded', fetchTopPosts);
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const API_KEY = '3b231ded94bf43278721f803e3d14da2';
+  const NEWS_API = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
+  const container = document.getElementById('news-container');
+
+  if (!container) {
+      console.error("Error: #news-container not found in DOM!");
+      return;
+  }
+
+  async function fetchNews() {
+      try {
+          const response = await fetch(NEWS_API);
+          const data = await response.json();
+          if (data.status === 'ok') {
+              displayNews(data.articles);
+          } else {
+              container.innerHTML = `<p>Error: ${data.message}</p>`;
+          }
+      } catch (error) {
+          container.innerHTML = `<p>Failed to fetch news: ${error.message}</p>`;
+      }
+  }
+
+  function displayNews(articles) {
+      container.innerHTML = articles.map(article => `
+          <div class="news-article">
+              <h2>${article.title}</h2>
+              ${article.urlToImage ? `<img src="${article.urlToImage}" alt="${article.title}">` : ''}
+              <p>${article.description || ''}</p>
+              <a href="${article.url}" target="_blank">Read more</a>
+          </div>
+      `).join('');
+  }
+
+  fetchNews(); // Fetch news after DOM is ready
+});
+
+// popup.js
+document.addEventListener("DOMContentLoaded", () => {
+  chrome.runtime.sendMessage({ action: "fetchNews" }, (response) => {
+    if (response.error) {
+      console.error("Error:", response.error);
+    } else {
+      displayNews(response.articles);
+    }
+  });
+});
+
+function displayNews(articles) {
+  const container = document.getElementById("news-container");
+  container.innerHTML = articles.map(article => `
+    <div class="article">
+      <h3>${article.title}</h3>
+      <p>${article.description || "No description"}</p>
+      <a href="${article.url}" target="_blank">Read more</a>
+    </div>
+  `).join("");
+}
